@@ -19,7 +19,7 @@ const noteRoutes=require('./routes/notes');
 
 
 app.use('/api/v1/auth',authRoutes);
-app.use('/api/v1/:token/notes',noteRoutes);
+app.use('/api/v1/notes',noteRoutes);
 
 server.listen(process.env.PORT,()=>{
     console.log(`server listening on port ${process.env.PORT}`);

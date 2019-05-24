@@ -7,7 +7,6 @@ const noteCtrl=require('../controllers/notecontroller.js');
 
 router.use(auth.tokenvalidater);
 
-
 const uploadConfig = {
     engine: multer,
     folder: "/uploads",
@@ -35,14 +34,22 @@ const uploadConfig = {
   };
 
 
-router.get('/',(req,res)=>{
-    console.log(req.params)
+router.get('/:userId/created',(req,res)=>{
+    //console.log(req.params);
+    noteCtrl.getCreatedNotes(req,res)
 })
 
 router.post('/',uploadFile,(req,res)=>{
-
   noteCtrl.createNote(req,res);
+})
 
+router.put('/:id',uploadFile,(req,res)=>{
+  noteCtrl.updateNote(req,res);
+
+})
+
+router.delete('/:id',(req,res)=>{
+  noteCtrl.deleteNote(req,res);
 })
 
 

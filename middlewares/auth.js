@@ -2,7 +2,8 @@ const user=require('../models/user.js');
 const moment=require('moment');
 
 const tokenvalidater=(req,res,next)=>{
-    const token=req.params.token;
+   
+    const token=getTokenFromHeader(req);
     if(token){
         user.getTokenDetails(token)
         .then(tokenDetails=>{
@@ -39,7 +40,7 @@ const tokenvalidater=(req,res,next)=>{
     }
 
     const isTokenValid=(createdTime)=>{
-        const duration=120;
+        const duration=180;
         const now=moment().valueOf();
         const expiredTime=moment(createdTime).add(duration,'minutes').valueOf();
 
@@ -48,6 +49,18 @@ const tokenvalidater=(req,res,next)=>{
         }else{
             return(false)
         }
+    }
+}
+
+const getTokenFromHeader=(req)=>{
+    const headers=req.headers;
+    //console.log(headers);
+    const authorizationToken=headers.authorization;
+    if(authorizationToken){
+        const token=authorizationToken.split(' ')[1];
+        return token;
+    }else{
+        return(false);
     }
 }
 

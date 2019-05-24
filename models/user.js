@@ -17,7 +17,7 @@ const register=(user)=>{
     return new Promise((resolve,reject)=>{
         getUser(email)
         .then(user=>{
-            console.log(user)
+           // console.log(user)
             if(user.length===0){
                 const sql='insert into users set ?';
                 con.query(sql,[data],(err,rows,fields)=>{
@@ -35,7 +35,22 @@ const register=(user)=>{
     })
 }
 
+const loginManager=async (email,password)=>{
+
+    const users=await login(email,password);
+    if(users.length>0){
+        const data=await updateToken(email);
+        const token={
+            token:data.token
+        }
+        return [Object.assign({},users[0],token)];
+    }else{
+        return([])
+    }
+
+}
 const login=(email,password)=>{
+
 
     const sql='select id,token,token_created_at from users where email=? and password=?';
     return new Promise((resolve,reject)=>{
@@ -75,6 +90,20 @@ const getUser=(email)=>{
     })
 }
 
+const logout=(email)=>{
+    const sql='update users set ? where email=?';
+    const data={
+        token:null,
+        token_created_at:moment().format()
+    }
+    return new Promise((resolve,reject)=>{
+        con.query(sql,[data,email],(err,rows,fields)=>{
+            if(err) reject(err);
+            resolve(rows);
+        })
+    })
+}
+
 const getTokenDetails=(token)=>{
     const sql='select id,token,token_created_at from users where token=?';
     return new Promise((resolve,reject)=>{
@@ -92,6 +121,8 @@ const getTokenDetails=(token)=>{
 
 module.exports={
     register,
-    login,
-    getTokenDetails
+    loginManager,
+    updateToken,
+    getTokenDetails,
+    logout
 }
