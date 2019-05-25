@@ -2,7 +2,8 @@ const noteModel=require('../models/notes.js');
 const createNote=(req,res)=>{
 
     const file={
-        image:req.file.path
+        image:req.file.path,
+        createdBy:req.userId
     }
     const note=Object.assign({},req.body,file);
     //console.log(req.file)

@@ -10,6 +10,7 @@ const tokenvalidater=(req,res,next)=>{
             if(tokenDetails.length>0){
                 if(isTokenValid(tokenDetails[0].token_created_at)){
                     console.log('token valid');
+                    req.userId=tokenDetails[0].id;
                     next();
 
                 }else{
