@@ -1,57 +1,155 @@
 # Machine test server
-user api.
+Notes api.
 ## Getting Started
     git clone https://github.com/sreejithsreeji/machine-test
 ### Prerequisites
 Nodejs
 mysql
 ### Dependencies
-create .env file using the format prescribed in the test-env.json	
+create .env file using the format prescribed in the env.json	
 		
 ### Starting environment
-    cd test
+    cd notes-app
+    npm install -to install dependencies
     npm start
 This will start the server in **localhost:{PORT}**
 #### Sample Request
 ######REGISTER USER
- POST http://localhost:5000/users
+ POST http://localhost:4000/api/v1/auth/register
  
     BODY {
-      "fullname":"sreejith",
-      "email":"m.srijti@gmail.com",
-      "password":"1232456",
-      "profile":"wer"	
-      }
+    "email": "thesreejith@gmail.com",
+    "password": "Sreejith@13",
+    "firstname": "sreejith",
+    "lastname": "m",
+    "address": "abc"
+  }
+  # RESPONSE
+
+   {
+    "status": true,
+    "code": 201,
+    "message": "user registartion completed",
+    "token": "6590cdb11318547301b157fb768972e027aac3ebe2b670bc31f3db3a1466c955"
+   }
     
    
-  ###### UPDATE USER PROFILE  
+  ###### LOGIN 
  
-     PATCH http://localhost:5000/users/:token
-     sample http://localhost:5000/users/55720d6f2095c1dd81c1fde539a52856a2236a477a6b12e144da2b9813e833eb
+     POST http://localhost:4000/api/v1/auth/login
         BODY {
-             "fullname":"sreeji",
+             
              "email":"m.srijti@gmail.com",
-             "password":"1232456",
-             "profile":"wer"	
+             "password":"hai",
+             
              } 
-######GENERATE TOKEN  
-           
-    GET http://localhost:5000/users/token/generate?email={email}
-    sample request http://localhost:5000/users/token/generate?email=m.srijithsri@gmail.com
-    response:{
-             "status": true,
-             "message": "Token generated sucessfully",
-             "token": "1376c88b98ab1bcd16dca459509e8bf01799210da4b8f2d42735166d6f4461cf"
-         }
-      
-####         
-    //Here iam not added the validations beacause iam not familaer with JOI library or express validater which is used for input validateion,
-    //i need some more time to read JOI doc and implement with this
-    //not added image uploading mechanism
 
-    //UPDATE
-    //Added image upload feature in new branch
-    //Added user input validation using Joi
-    //some bugs are removed
-    //changes push into the new branch
-    //all other ,modules are working perfectly  Thank You       
+   # RESPONSE
+      {
+    "status": true,
+    "code": 201,
+    "message": "login successfull",
+    "token": "2971a28a5ada95a5afa605f796a22538fee4cea1d84e05f7eb94a84d1fc4559e"
+    } 
+
+######LOGOUT
+           
+    POST http://localhost:4000/api/v1/auth/logout?email={email}
+    sample request http://localhost:4000/api/v1/auth/logout?email=m.srijithsri@gmail.com
+    response:{
+    "status": true,
+    "code": 200,
+    "message": "logout sucessfully"
+}
+      
+####  NOTES API SECTION
+ ## CREATE NOTE
+    POST http://localhost:4000/api/v1/notes
+    headers {
+        Authorization: Bearer <TOKEN HERE>
+    }
+    BODY multipart/form-data
+     {
+         text:"new note",
+         image:"file ",
+         title:"title
+         }
+ # response 
+   {
+    "status": true,
+    "code": 201,
+    "message": "A new note is created"
+    }
+
+ ### UPDATE NOTE
+
+      PUT http://localhost:4000/api/v1/notes/{noteId}
+       sample request http://localhost:4000/api/v1/notes/5
+    headers {
+        Authorization: Bearer <TOKEN HERE>
+    }
+    BODY multipart/form-data
+     {
+         text:"new note",
+         image:"file ",
+         title:"title
+         }
+ # response 
+   {
+    "status": true,
+    "code": 200,
+    "message": "updated successfully"
+    }
+
+## DELETE NOTE
+  
+   DELETE http://localhost:4000/api/v1/notes/5
+     headers {
+        Authorization: Bearer <TOKEN HERE>
+    }
+
+## GET ALL NOTES CREATED BY A USER
+  GET http://localhost:4000/api/v1/notes/{userId}/created    
+    sample request http://localhost:4000/api/v1/notes/1/created
+     headers {
+        Authorization: Bearer <TOKEN HERE>
+    }
+    response: [{
+        id:1,
+        title:'a',
+        ...
+    }]
+
+ ###  
+    
+    //How things are working
+     Here iam using a single server which responsible for handling all data.
+     First,
+       User register himself by providing basic details,all details are requires.
+       here iam added input validations using JOI library.
+       all basic validation schemes are statisfied.after registration system provide a unique TOKEN for the user.and user need to store this token in their local storage(production).we set a expre duration for this token.after expiration you need to login again.
+     LOGIN: by providing email,and password you can login to syatem,you will be provided with new token too.
+
+     LOGOUT:
+        here we remove the token and make token invalid.no additional request will be entertained.so you need tpo login again to get a new token.
+        this way iam handle the authentication.
+
+        In producation we can use JWT token instead of this.
+
+     NOTES SECTION:
+      Only authenticated users can read,write,delete the notes.
+      This is achevied by adding token as a header to the each routes.
+      here iam add a middleware to check token is valid,if valid control passed.so only authenticated user can enter the system.
+      so in notes section you should pass token in header.
+
+    Here iam using mysql as database. 
+     first you need to copy the mysql dump file and create a database in your system.
+
+     Nb: File uploading is added (only .jpeg and max file size 2 MB),
+         User input validation added in register section.
+
+     Ps: I didn't understand why it need a 3 server for handling this.So i approached this problen with this way.
+     If you are strictly looking to build the sytem in mentioned way (by using 3 servers) please let me know.
+     I can change this code in that way too easeily.     
+    
+    //all  modules are tested and working perfectly. Thank You       
