@@ -1,10 +1,10 @@
 # Machine test server
 Notes api.
 ## Getting Started
-    git clone https://github.com/sreejithsreeji/machine-test
+    git clone https://github.com/sreejithsreeji/notes-app
 ### Prerequisites
-Nodejs
-mysql
+ Nodejs  
+ mysql
 ### Dependencies
 create .env file using the format prescribed in the env.json	
 		
@@ -14,8 +14,8 @@ create .env file using the format prescribed in the env.json
     npm start
 This will start the server in **localhost:{PORT}**
 #### Sample Request
-######REGISTER USER
- POST http://localhost:4000/api/v1/auth/register
+###### REGISTER USER
+  POST http://localhost:4000/api/v1/auth/register
  
     BODY {
     "email": "thesreejith@gmail.com",
@@ -24,67 +24,68 @@ This will start the server in **localhost:{PORT}**
     "lastname": "m",
     "address": "abc"
   }
-  # RESPONSE
-
-   {
+   ###### RESPONSE  
+   
+    {
     "status": true,
     "code": 201,
     "message": "user registartion completed",
     "token": "6590cdb11318547301b157fb768972e027aac3ebe2b670bc31f3db3a1466c955"
-   }
+     }
     
    
   ###### LOGIN 
- 
-     POST http://localhost:4000/api/v1/auth/login
+   POST http://localhost:4000/api/v1/auth/login
+   
         BODY {
-             
              "email":"m.srijti@gmail.com",
              "password":"hai",
-             
              } 
 
-   # RESPONSE
+   ###### RESPONSE
       {
-    "status": true,
-    "code": 201,
-    "message": "login successfull",
-    "token": "2971a28a5ada95a5afa605f796a22538fee4cea1d84e05f7eb94a84d1fc4559e"
+         "status": true,
+         "code": 201,
+         "message": "login successfull",
+         "token": "2971a28a5ada95a5afa605f796a22538fee4cea1d84e05f7eb94a84d1fc4559e"
     } 
 
-######LOGOUT
-           
-    POST http://localhost:4000/api/v1/auth/logout?email={email}
+######LOGOUT      
+ **POST** http://localhost:4000/api/v1/auth/logout?email={email}
+    
     sample request http://localhost:4000/api/v1/auth/logout?email=m.srijithsri@gmail.com
+    
     response:{
     "status": true,
     "code": 200,
     "message": "logout sucessfully"
 }
       
-####  NOTES API SECTION
- ## CREATE NOTE
-    POST http://localhost:4000/api/v1/notes
+###  NOTES API SECTION
+ ###### CREATE NOTE
+   POST http://localhost:4000/api/v1/notes 
+   
     headers {
         Authorization: Bearer <TOKEN HERE>
     }
+    
     BODY multipart/form-data
      {
          text:"new note",
          image:"file ",
          title:"title
          }
- # response 
-   {
+ ###### response  
+    {
     "status": true,
     "code": 201,
     "message": "A new note is created"
     }
 
- ### UPDATE NOTE
-
-      PUT http://localhost:4000/api/v1/notes/{noteId}
-       sample request http://localhost:4000/api/v1/notes/5
+ ##### UPDATE NOTE
+  PUT http://localhost:4000/api/v1/notes/{noteId}
+  
+    sample request http://localhost:4000/api/v1/notes/5
     headers {
         Authorization: Bearer <TOKEN HERE>
     }
@@ -94,35 +95,39 @@ This will start the server in **localhost:{PORT}**
          image:"file ",
          title:"title
          }
- # response 
-   {
+ ###### response 
+     {
     "status": true,
     "code": 200,
     "message": "updated successfully"
     }
 
-## DELETE NOTE
-  
-   DELETE http://localhost:4000/api/v1/notes/5
+###### DELETE NOTE
+   DELETE http://localhost:4000/api/v1/notes/{noteId}
+   
      headers {
         Authorization: Bearer <TOKEN HERE>
     }
 
-## GET ALL NOTES CREATED BY A USER
-  GET http://localhost:4000/api/v1/notes/{userId}/created    
+##### GET ALL NOTES CREATED BY A USER
+
+  GET http://localhost:4000/api/v1/notes/{userId}/created 
+     
     sample request http://localhost:4000/api/v1/notes/1/created
+    
      headers {
         Authorization: Bearer <TOKEN HERE>
     }
+ ###### RESPONSE
     response: [{
-        id:1,
-        title:'a',
-        ...
-    }]
+         id:1,
+         title:'a',
+         ...
+     }]
 
- ###  
+ ###  How things are working
     
-    //How things are working
+    
      Here iam using a single server which responsible for handling all data.
      First,
        User register himself by providing basic details,all details are requires.
