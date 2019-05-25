@@ -4,7 +4,9 @@ Notes api.
     git clone https://github.com/sreejithsreeji/notes-app
 ### Prerequisites
  Nodejs  
- mysql
+ mysql  
+ _MySql dump is uploaded in the project root directory.please run the dumb file inorder to make databse._
+
 ### Dependencies
 create .env file using the format prescribed in the env.json	
 		
